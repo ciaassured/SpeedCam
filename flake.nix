@@ -17,10 +17,28 @@
                 buildInputs = with pkgs; [
                     git
                     pkg-config
-                    ansible
                     libgphoto2
+                    clang
+                    llvmPackages.libclang
                     rust-bin.stable.latest.default
+                    ansible
                 ];
+            };
+
+            packages = {
+                default = self.packages.${system}.speedcam;
+
+                speedcam = pkgs.rustPlatform.buildRustPackage {
+                    pname = "speedcam";
+                    version = "0.1.0";
+
+                    src = ./speedcam;
+
+                    buildInputs = [ pkgs.libgphoto2 ];
+                    nativeBuildInputs = with pkgs; [ pkg-config clang rustPlatform.bindgenHook ];
+                    cargoHash = "sha256-vKxI9sUSKzffv5B9VNX5/dLZ2krcGRSv/3vk5Oi8YVk=";
+                    doCheck = false;
+                };
             };
         }
     );
