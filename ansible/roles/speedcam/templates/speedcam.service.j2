@@ -1,0 +1,21 @@
+[Unit]
+Description=SpeedCam service
+After=network.target
+
+[Service]
+User={{ target_user }}
+Group={{ target_user }}
+
+ExecStart={{ exec_start | default('/usr/local/bin/speedcam') }}
+
+# Service behavior
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGINT
+Type=simple
+
+Environment=RUST_BACKTRACE=1
+Environment=LOG_LEVEL=info
+
+[Install]
+WantedBy=multi-user.target

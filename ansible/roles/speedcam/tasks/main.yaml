@@ -15,3 +15,26 @@
     chdir: "$HOME/speedcam/speedcam"
   environment:
     CARGO_HOME: "{{ cargo_prefix }}"
+
+- name: Install speedcam binary
+  become: true
+  ansible.builtin.copy:
+    src: "/home/{{ target_user }}/speedcam/speedcam/target/release/speedcam"
+    dest: /usr/local/bin/speedcam
+    mode: '0755'
+    remote_src: yes
+
+- name: Create systemd service for speedcam
+  become: true
+  ansible.builtin.template:
+    src: speedcam.service.j2
+    dest: /etc/systemd/system/speedcam.service
+    mode: '0644'
+
+- name: Reload systemd and enable speedcam service
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    name: speedcam.service
+    enabled: yes
+    state: started
