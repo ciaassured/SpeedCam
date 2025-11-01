@@ -1,0 +1,12 @@
+- name: Ensure apt cache is up to date
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install required packages
+  apt:
+    name:
+      - libgphoto2-dev
+      - gphoto2
+      - git
+    state: present

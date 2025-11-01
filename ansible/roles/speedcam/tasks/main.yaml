@@ -1,0 +1,17 @@
+- name: Git checkout speedcam
+  become: true
+  become_user: "{{ target_user }}"
+  ansible.builtin.git:
+    repo: 'https://github.com/ciaassured/speedcam.git'
+    dest: "/home/{{ target_user }}/speedcam"
+    version: main
+    update: yes
+
+- name: Build speedcam
+  become: true
+  become_user: "{{ target_user }}"
+  ansible.builtin.command:
+    cmd: "{{ cargo_prefix }}/bin/cargo build --release"
+    chdir: "$HOME/speedcam/speedcam"
+  environment:
+    CARGO_HOME: "{{ cargo_prefix }}"

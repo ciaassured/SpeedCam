@@ -1,0 +1,2 @@
+---
+cargo_prefix: "/home/{{ target_user }}/.cargo"

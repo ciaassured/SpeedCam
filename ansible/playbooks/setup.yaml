@@ -1,0 +1,13 @@
+---
+# Ansible playbook to configure a Raspberry Pi speed camera.
+# Usage:
+#   ansible-playbook playbooks/setup_pi.yaml
+
+- name: Configure speed camera Raspberry Pi
+  hosts: all
+  become: true
+
+  roles:
+    - system
+    - rustup
+    - speedcam
