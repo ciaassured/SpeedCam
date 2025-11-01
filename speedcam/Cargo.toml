@@ -1,0 +1,7 @@
+[package]
+name = "speedcam"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gphoto2 = "3.4.1"
