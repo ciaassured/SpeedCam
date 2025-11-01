@@ -9,4 +9,5 @@
       - libgphoto2-dev
       - gphoto2
       - git
+      - clang
     state: present
