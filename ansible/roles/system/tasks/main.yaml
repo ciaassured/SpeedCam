@@ -12,6 +12,7 @@
       - git
       - clang
       - picocom
+      - libudev-dev
     state: present
 
 - name: Enable UART on Raspberry Pi
