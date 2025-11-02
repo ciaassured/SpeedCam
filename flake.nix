@@ -18,6 +18,7 @@
                     git
                     pkg-config
                     libgphoto2
+                    libudev-zero
                     clang
                     llvmPackages.libclang
                     ( rust-bin.stable.latest.default.override { extensions = ["rust-src"]; } )
