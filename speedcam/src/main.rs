@@ -1,17 +1,24 @@
-use gphoto2::{Context, Result};
-use std::path::Path;
+use anyhow::Result;
+use simple_logger::SimpleLogger;
+
+mod hlk_ld2451;
+mod camera;
 
 fn main() -> Result<()> {
-  // Create a new context and detect the first camera from it
-  let camera = Context::new()?.autodetect_camera().wait().expect("Failed to autodetect camera");
-  let camera_fs = camera.fs();
+  SimpleLogger::new().init().unwrap();
 
+  let mut radar = hlk_ld2451::Radar::new("/dev/serial0")?;
+  let camera = camera::Camera::new()?;
 
-  // And take pictures
-  let file_path = camera.capture_image().wait().expect("Could not capture image");
-  camera_fs.download_to(&file_path.folder(), &file_path.name(), Path::new(&file_path.name().to_string())).wait()?;
-
-  // For more advanced examples take a look at the examples/ folder
-
-  Ok(())
+  loop {
+      let data = radar.read_targets()?;
+      if !data.is_empty() {
+        log::info!("Detected targets: {:?}", data);
+        if data.iter().any(|t| t.speed > 5) {
+          camera.take_photo()?;
+          radar.flush()?;
+          log::info!("Photo taken due to speed violation.");
+        }
+      }
+  }
 }
