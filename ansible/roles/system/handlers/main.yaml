@@ -1,0 +1,7 @@
+---
+- name: reboot
+  become: true
+  ansible.builtin.reboot:
+    msg: "Rebooting device"
+    reboot_timeout: 600
+    test_command: whoami  
