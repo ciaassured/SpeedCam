@@ -4,4 +4,5 @@
   ansible.builtin.reboot:
     msg: "Rebooting device"
     reboot_timeout: 600
-    test_command: whoami  
+    test_command: whoami
+

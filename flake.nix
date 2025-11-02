@@ -34,12 +34,13 @@
 
                     src = ./speedcam;
 
-                    buildInputs = [ pkgs.libgphoto2 ];
+                    buildInputs = [ pkgs.libgphoto2 pkgs.libudev-zero ];
                     nativeBuildInputs = with pkgs; [ pkg-config clang rustPlatform.bindgenHook ];
-                    cargoHash = "sha256-vKxI9sUSKzffv5B9VNX5/dLZ2krcGRSv/3vk5Oi8YVk=";
+                    cargoHash = "sha256-OEecRCBLLaSjNoaYFHuJEVS12mQawnTvHvPUBdNLsH4=";
                     doCheck = false;
                 };
             };
         }
     );
 }
+
