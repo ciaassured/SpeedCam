@@ -1,3 +1,4 @@
+---
 - name: Ensure apt cache is up to date
   apt:
     update_cache: yes
@@ -10,4 +11,36 @@
       - gphoto2
       - git
       - clang
+      - picocom
     state: present
+
+- name: Enable UART on Raspberry Pi
+  lineinfile:
+    path: /boot/firmware/config.txt
+    regexp: '^\s*enable_uart\s*='
+    line: 'enable_uart=1'
+    insertafter: '\[all\]'
+    state: present
+  notify: reboot
+
+- name: Backup cmdline.txt to /root # VFAT filesystem wont allow default backup for lineinfile module
+  copy:
+    src: "/boot/firmware/cmdline.txt"
+    dest: "/root/cmdline.txt.{{ ansible_date_time.iso8601_basic_short }}.bak"
+    remote_src: true
+    mode: '0600'
+
+- name: Remove serial console from cmdline.txt
+  replace:
+    path: "/boot/firmware/cmdline.txt"
+    regexp: '\s*(console=(serial0|ttyAMA0),\d+\s*|console=ttyS0,\d+\s*|kgdboc=(serial0|ttyAMA0),\d+\s*)'
+    replace: ' '
+    backup: no
+  notify: reboot
+
+- name: Ensure user is in dialout group
+  user:
+    name: "{{ target_user }}"
+    append: true
+    groups: dialout
+  notify: reboot
