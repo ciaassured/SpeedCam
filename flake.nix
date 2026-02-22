@@ -24,6 +24,8 @@
                     ( rust-bin.stable.latest.default.override { extensions = ["rust-src"]; } )
                     ansible
                 ];
+
+                LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
             };
 
             packages = {
